@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bai 1</title>
+    <div class="popup" id="firstCo">
+    <form name="chonMau" style="line-height: 2;">
+        <label><b>Chọn màu đi trước</b></label>
+        <br>
+        <input type="radio" name="Mau" value="Trang" checked="checked"> Trắng
+        <input type="radio" name="Mau" value="Den"> Đen
+        <br>
+        <input type="button" value="Chọn" onclick="ChonMau()">
+    </form>
+    </div>
+    <div class="popup" id="phongCap">
+        <form name="pCap" style="line-height: 2;">
+            <label><b>Phong cấp</b></label>
+            <br>
+            <input type="radio" name="Cap" value="Hau" id="rsH" checked="checked"> Hậu ♚
+            <input type="radio" name="Cap" value="Xe"> Xe ♜
+            <br>
+            <input type="radio" name="Cap" value="Tuong"> Tượng ♝
+            <input type="radio" name="Cap" value="Ma"> Mã ♞
+            <br>
+            <input type="button" value="Chọn" onclick="ChonCap()">
+        </form>
+    </div>
+    <script type="text/javascript">
+    var luotTrang = false;
+    var isEnd = false;
+    function ChonMau() {
+        var mau = chonMau.Mau.value;
+        if (mau == "Den") luotTrang = false;
+        else luotTrang = true;
+        LuotDi();
+        document.getElementById("firstCo").style.display = "none";
+    }
+    function ChonCap() {
+        document.getElementById("phongCap").style.display = "none";
+        var reset = function() {
+            document.getElementById("rsH").checked = true;
+        }
+        setTimeout(reset, 3000);
+    }
+    function ReStart() {
+        location.reload();
+    }
+    function KhoiTao() {
+        document.getElementById("firstCo").style.display = "inline-block";
+        for (i = 1; i <= 2; i++) {
+            for (j = 1; j <= 8; j++) {
+                document.getElementById(i.toString()+j.toString()).click();
+            }
+        }
+        for (i = 7; i <= 8; i++) {
+            for (j = 1; j <= 8; j++) {
+                document.getElementById(i.toString()+j.toString()).click();
+            }
+        }
+    }
+    function LuotDi() {
+        var chk1 = document.getElementById("co1").innerHTML;
+        var chk2 = document.getElementById("co2").innerHTML;
+        if (chk1 != null) chk1 = chk1.substring(chk1.length-1, chk1.length);
+        if (chk2 != null) chk2 = chk2.substring(chk2.length-1, chk2.length);
+        if ((chk1 == "♛") || (chk2 == "♛")) isEnd = true;
+        if (isEnd) {
+            document.getElementById("avt1").style.border = "solid 5px";
+            document.getElementById("avt2").style.border = "solid 5px";
+            document.getElementById("rs").style.display = "inline-block";
+            return;
+        }
+        if (luotTrang) {
+            document.getElementById("tb").innerHTML = "Lượt cờ Trắng";
+            document.getElementById("avt1").style.border = "solid 5px red";
+            document.getElementById("avt2").style.border = "solid 5px";
+        }
+        else { 
+            document.getElementById("tb").innerHTML = "Lượt cờ Đen";
+            document.getElementById("avt2").style.border = "solid 5px red";
+            document.getElementById("avt1").style.border = "solid 5px";
+        }
+    }
+    function setupOnclick(obj) {
+        var idt = getId(obj);
+        var namet = GetName(idt);
+        document.getElementById(idt).style.zIndex = 12;
+        switch(namet) {
+            case 'Xe':
+                Xe(idt);
+            break;
+            case 'Ma':
+                Ma(idt);
+            break;
+            case 'Tuong':
+                Tuong(idt);
+            break;
+            case 'Hau':
+                Hau(idt);
+            break;
+            case 'Vua':
+                Vua(idt);
+            break;
+            case 'Tot':
+                Tot(idt);
+            break;
+        }
+    }
+    function setupDragDrop(obj) {
+        var idt = getId(obj);
+        obj.onmousedown = function(e) {
+            var maut = GetMau(idt);
+            if ((luotTrang && maut == "Den") || (!luotTrang && maut == "Trang") || isEnd) {
+                obj.onmouseup();
+                return;
+            }
+            if (isNaN(parseInt(this.style.left))) {
+                this.style.left = this.offsetLeft + "px";
+            }if (isNaN(parseInt(this.style.top))) {
+                this.style.top = this.offsetTop + "px";
+            }
+            setupOnclick(this);
+            this.oldX = e.clientX;
+            this.oldY = e.clientY;
+            this.isDown = true;
+        }
+        obj.onmousemove = function(e) {
+            if(this.isDown) {
+                let dx = e.clientX - this.oldX;
+                let dy = e.clientY - this.oldY;
+                this.style.left = parseInt(this.style.left) + dx + "px";
+                this.style.top = parseInt(this.style.top) + dy + "px";
+                this.oldX = e.clientX;
+                this.oldY = e.clientY;
+            }
+        }
+        obj.onmouseup = function() {
+            var idn;
+            if (this.oldX > 490 || this.oldY > 490 || this.oldX < 10 || this.oldY < 10)
+                idn = idt;
+            else idn = getId(this);
+            var kqdc = DiChuyen(idt, idn);
+            this.isDown = false;
+            if (kqdc) luotTrang = !luotTrang;
+            LuotDi();
+        }
+    }
+    </script>
+    <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="Dinhhuong/Hau.js"></script>
+    <script type="text/javascript" src="Dinhhuong/Xe.js"></script>
+    <script type="text/javascript" src="Dinhhuong/Ma.js"></script>
+    <script type="text/javascript" src="Dinhhuong/Tuong.js"></script>
+    <script type="text/javascript" src="Dinhhuong/Vua.js"></script>
+    <script type="text/javascript" src="Dinhhuong/Tot.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+</head>
+<body onload="KhoiTao()">
+    <div>
+        <table id="gameBoardBorder">
+            <tr>
+                <td id = "b11" class="whiteSquare"></td>
+                <td id = "b12" class="blackSquare"></td>
+                <td id = "b13" class="whiteSquare"></td>
+                <td id = "b14" class="blackSquare"></td>
+                <td id = "b15" class="whiteSquare"></td>
+                <td id = "b16" class="blackSquare"></td>
+                <td id = "b17" class="whiteSquare"></td>
+                <td id = "b18" class="blackSquare"></td>
+            </tr>
+            <tr>
+                <td id = "b21" class="blackSquare"></td>
+                <td id = "b22" class="whiteSquare"></td>
+                <td id = "b23" class="blackSquare"></td>
+                <td id = "b24" class="whiteSquare"></td>
+                <td id = "b25" class="blackSquare"></td>
+                <td id = "b26" class="whiteSquare"></td>
+                <td id = "b27" class="blackSquare"></td>
+                <td id = "b28" class="whiteSquare"></td>          
+            </tr>
+            <tr>
+                <td id = "b31" class="whiteSquare"></td>
+                <td id = "b32" class="blackSquare"></td>
+                <td id = "b33" class="whiteSquare"></td>
+                <td id = "b34" class="blackSquare"></td>
+                <td id = "b35" class="whiteSquare"></td>
+                <td id = "b36" class="blackSquare"></td>
+                <td id = "b37" class="whiteSquare"></td>          
+                <td id = "b38" class="blackSquare"></td>
+            </tr>
+            <tr>
+                <td id = "b41" class="blackSquare"></td>
+                <td id = "b42" class="whiteSquare"></td>
+                <td id = "b43" class="blackSquare"></td>
+                <td id = "b44" class="whiteSquare"></td>
+                <td id = "b45" class="blackSquare"></td>
+                <td id = "b46" class="whiteSquare"></td>          
+                <td id = "b47" class="blackSquare"></td>
+                <td id = "b48" class="whiteSquare"></td>
+            </tr>
+            <tr>
+                <td id = "b51" class="whiteSquare"></td>
+                <td id = "b52" class="blackSquare"></td>
+                <td id = "b53" class="whiteSquare"></td>
+                <td id = "b54" class="blackSquare"></td>
+                <td id = "b55" class="whiteSquare"></td>
+                <td id = "b56" class="blackSquare"></td>
+                <td id = "b57" class="whiteSquare"></td>          
+                <td id = "b58" class="blackSquare"></td>
+            </tr>
+            <tr>
+                <td id = "b61" class="blackSquare"></td>
+                <td id = "b62" class="whiteSquare"></td>
+                <td id = "b63" class="blackSquare"></td>
+                <td id = "b64" class="whiteSquare"></td>
+                <td id = "b65" class="blackSquare"></td>
+                <td id = "b66" class="whiteSquare"></td>          
+                <td id = "b67" class="blackSquare"></td>
+                <td id = "b68" class="whiteSquare"></td>
+            </tr>
+            <tr>
+                <td id = "b71" class="whiteSquare"></td>
+                <td id = "b72" class="blackSquare"></td>
+                <td id = "b73" class="whiteSquare"></td>
+                <td id = "b74" class="blackSquare"></td>
+                <td id = "b75" class="whiteSquare"></td>
+                <td id = "b76" class="blackSquare"></td>
+                <td id = "b77" class="whiteSquare"></td>          
+                <td id = "b78" class="blackSquare"></td>
+            </tr>
+            <tr>
+                <td id = "b81" class="blackSquare"></td>
+                <td id = "b82" class="whiteSquare"></td>
+                <td id = "b83" class="blackSquare"></td>
+                <td id = "b84" class="whiteSquare"></td>
+                <td id = "b85" class="blackSquare"></td>
+                <td id = "b86" class="whiteSquare"></td>          
+                <td id = "b87" class="blackSquare"></td>
+                <td id = "b88" class="whiteSquare"></td>
+            </tr>
+        </table>
+    </div>
+    <div id="11" class="coTrang Xe" onclick="setupDragDrop(this)">♜</div>
+    <div id="18" class="coTrang Xe" style="left:430px" onclick="setupDragDrop(this)">♜</div>
+    <div id="17" class="coTrang Ma" style="left:370px" onclick="setupDragDrop(this)">♞</div>
+    <div id="12" class="coTrang Ma" style="left:70px" onclick="setupDragDrop(this)">♞</div>
+    <div id="16" class="coTrang Tuong" style="left:310px" onclick="setupDragDrop(this)">♝</div>
+    <div id="13" class="coTrang Tuong" style="left:130px" onclick="setupDragDrop(this)">♝</div>
+    <div id="15" class="coTrang Vua" style="left:250px" onclick="setupDragDrop(this)">♛</div>
+    <div id="14" class="coTrang Hau" style="left:190px" onclick="setupDragDrop(this)">♚</div>
+    <div id="21" class="coTrang Tot" style="top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="22" class="coTrang Tot" style="left:70px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="23" class="coTrang Tot" style="left:130px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="24" class="coTrang Tot" style="left:190px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="25" class="coTrang Tot" style="left:250px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="26" class="coTrang Tot" style="left:310px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="27" class="coTrang Tot" style="left:370px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="28" class="coTrang Tot" style="left:430px; top:70px" onclick="setupDragDrop(this)">♟</div>
+    <div id="71" class="coDen Tot" style="top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="72" class="coDen Tot" style="left:70px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="73" class="coDen Tot" style="left:130px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="74" class="coDen Tot" style="left:190px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="75" class="coDen Tot" style="left:250px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="76" class="coDen Tot" style="left:310px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="77" class="coDen Tot" style="left:370px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="78" class="coDen Tot" style="left:430px; top:370px" onclick="setupDragDrop(this)">♟</div>
+    <div id="81" class="coDen Xe" style="top:430px;" onclick="setupDragDrop(this)">♜</div>
+    <div id="88" class="coDen Xe" style="left:430px; top:430px" onclick="setupDragDrop(this)">♜</div>
+    <div id="87" class="coDen Ma" style="left:370px; top:430px" onclick="setupDragDrop(this)">♞</div>
+    <div id="82" class="coDen Ma" style="left:70px; top:430px" onclick="setupDragDrop(this)">♞</div>
+    <div id="86" class="coDen Tuong" style="left:310px; top:430px" onclick="setupDragDrop(this)">♝</div>
+    <div id="83" class="coDen Tuong" style="left:130px; top:430px" onclick="setupDragDrop(this)">♝</div>
+    <div id="85" class="coDen Hau" style="left:250px; top:430px" onclick="setupDragDrop(this)">♚</div>
+    <div id="84" class="coDen Vua" style="left:190px; top:430px" onclick="setupDragDrop(this)">♛</div>
+    <div class="Nguoichoi">
+        <div class="Avatar" id="avt1"></div>
+        <div class="Detail">Người chơi cờ Trắng</div>
+        <div class="Detail" id="co1"></div>
+    </div>
+    <div class="Thongbao">
+        <div id = "tb"></div>
+        <button style="display: none;" id="rs" onclick="ReStart()">Restart</button>
+    </div>
+    <div class="Nguoichoi">
+        <div class="Avatar" style="background: black;" id="avt2"></div>
+        <div class="Detail">Người chơi cờ Đen</div>
+        <div class="Detail" id="co2"></div>
+    </div>
+</body>
+</html>

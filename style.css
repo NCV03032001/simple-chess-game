@@ -1,0 +1,113 @@
+body {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+.popup {
+    display: none;
+    position: absolute;
+    width: 60%;
+    height: 200px;
+    border: solid 10px black;
+    left: 20%;
+    top: 10%;
+    font-size: 25px;
+    text-align: center;
+    z-index: 20;
+    background-color: white;
+}
+.popup form input{
+    display: inline-block;
+}
+#gameBoardBorder {
+    width: 480px;
+    height: 480px;
+    float: left;
+    border-spacing: 0px;
+    line-height: 0;
+}
+.whiteSquare {
+    width: 54px;
+    height: 54px;
+    border: solid 2px;
+    background-color: rgb(238, 221, 221);
+}
+.blackSquare {
+    width: 54px;
+    height: 54px;
+    border: solid 2px;
+    background-color: rgb(88, 82, 82);
+}
+.coTrang {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    font-size: 50px;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-fill-color: white;
+    user-select: none;
+    z-index: 10;
+    color: white;
+}
+.coDen {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    font-size: 50px;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-fill-color: black;
+    user-select: none;
+    z-index: 10;
+    color: black;
+}
+.Nguoichoi {
+    height: 210px;
+    width: 65%;
+    float:right;
+    padding-top: 20px;
+    text-align: center;
+}
+.Thongbao {
+    height: 50px;
+    width: 62%;
+    font-size: 30px;
+    padding-top: 10px;
+    padding-right: 10px;
+    border: solid 5px yellowgreen;
+    float:right;
+    text-align: center; 
+}
+.Avatar {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: solid 5px;
+    display: inline-block;
+    text-align: center;
+}
+.Detail {
+    height: 50px;
+    display: block;
+    font-size: 30px;
+    text-align: center;
+}
+#tb {
+    display: inline;
+}
+#co2 {
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-fill-color: white;
+    user-select: none;
+    color: white;
+}
+#co1 {
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: black;
+    -webkit-text-fill-color: black;
+    user-select: none;
+    color: black;
+}
